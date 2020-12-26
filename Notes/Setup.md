@@ -1,3 +1,10 @@
+boilerplate checklist:
+install dependencies (make a list)
+files and folder structure
+database connection and other needed variables
+basic routes
+user model and auth
+<br>
 # Flask Setup
 
 Getting Files and Folders Setup
@@ -141,51 +148,51 @@ Create a file called forms.py so that we can keep our forms in one place and sep
 This tool allows us to write python classes and then they are converted to html forms.  We need to install quite a few dependencies to make our forms.
 
 /forms.py
-<span class="colour" style="color:rgb(106, 153, 85)">#\_\_\_ Import Module</span>
+<span class="colour" style="color:rgb(106, 153, 85)">`#___ Import Module`</span>
 
-<span class="colour" style="color:rgb(86, 156, 214)">from</span><span class="colour" style="color:rgb(212, 212, 212)"> flask\_wtf </span><span class="colour" style="color:rgb(86, 156, 214)">import</span><span class="colour" style="color:rgb(212, 212, 212)"> FlaskForm</span>
-<span class="colour" style="color:rgb(106, 153, 85)">#\_\_\_ Form Fields</span>
-<span class="colour" style="color:rgb(86, 156, 214)">from</span><span class="colour" style="color:rgb(212, 212, 212)"> wtforms </span><span class="colour" style="color:rgb(86, 156, 214)">import</span><span class="colour" style="color:rgb(212, 212, 212)"> StringField, PasswordField, SubmitField, BooleanField</span>
-<span class="colour" style="color:rgb(106, 153, 85)">#\_\_\_ Validators</span>
-<span class="colour" style="color:rgb(86, 156, 214)">from</span><span class="colour" style="color:rgb(212, 212, 212)"> wtforms.validators </span><span class="colour" style="color:rgb(86, 156, 214)">import</span><span class="colour" style="color:rgb(212, 212, 212)"> DataRequired, Length, Email, EqualTo</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`from`</span><span class="colour" style="color:rgb(212, 212, 212)">` flask_wtf `</span><span class="colour" style="color:rgb(86, 156, 214)">`import`</span><span class="colour" style="color:rgb(212, 212, 212)">` FlaskForm`</span>
+<span class="colour" style="color:rgb(106, 153, 85)">`#___ Form Fields`</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`from`</span><span class="colour" style="color:rgb(212, 212, 212)">` wtforms `</span><span class="colour" style="color:rgb(86, 156, 214)">`import`</span><span class="colour" style="color:rgb(212, 212, 212)">` StringField, PasswordField, SubmitField, BooleanField`</span>
+<span class="colour" style="color:rgb(106, 153, 85)">`#___ Validators`</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`from`</span><span class="colour" style="color:rgb(212, 212, 212)">` wtforms.validators `</span><span class="colour" style="color:rgb(86, 156, 214)">`import`</span><span class="colour" style="color:rgb(212, 212, 212)">` DataRequired, Length, Email, EqualTo`</span>
 
 When writing your input you select a field, you give it a name for the class and then the first argument is a string that will be the label for that input.  Next you can add your validators in an array, make sure you invoke them.  DataRequired means they can't leave it blank, Length takes two kwargs min and max, Email checks for valid email address, and EqualTo allows you to compare the two password fields and make sure they match.
 
 Registration Form:
 
-<span class="colour" style="color:rgb(86, 156, 214)">class</span><span class="colour" style="color:rgb(212, 212, 212)"> RegistrationForm(FlaskForm):</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`class`</span><span class="colour" style="color:rgb(212, 212, 212)">` RegistrationForm(FlaskForm):`</span>
 
-<span class="colour" style="color:rgb(212, 212, 212)">username = StringField(</span><span class="colour" style="color:rgb(206, 145, 120)">'Username'</span><span class="colour" style="color:rgb(212, 212, 212)">,</span>
-<span class="colour" style="color:rgb(212, 212, 212)">validators=[</span>
-<span class="colour" style="color:rgb(212, 212, 212)">DataRequired(),</span>
-<span class="colour" style="color:rgb(212, 212, 212)">Length(min=</span><span class="colour" style="color:rgb(181, 206, 168)">2</span><span class="colour" style="color:rgb(212, 212, 212)">, max=</span><span class="colour" style="color:rgb(181, 206, 168)">20</span><span class="colour" style="color:rgb(212, 212, 212)">)]),</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`username = StringField(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Username'`</span><span class="colour" style="color:rgb(212, 212, 212)">`,`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`validators=[`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`DataRequired(),`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`Length(min=`</span><span class="colour" style="color:rgb(181, 206, 168)">`2`</span><span class="colour" style="color:rgb(212, 212, 212)">`, max=`</span><span class="colour" style="color:rgb(181, 206, 168)">`20`</span><span class="colour" style="color:rgb(212, 212, 212)">`)]),`</span>
 
-<span class="colour" style="color:rgb(212, 212, 212)">email = StringField(</span><span class="colour" style="color:rgb(206, 145, 120)">'Email'</span><span class="colour" style="color:rgb(212, 212, 212)">,</span>
-<span class="colour" style="color:rgb(212, 212, 212)">validators=[</span>
-<span class="colour" style="color:rgb(212, 212, 212)">DataRequired(),</span>
-<span class="colour" style="color:rgb(212, 212, 212)">Email()]),</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`email = StringField(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Email'`</span><span class="colour" style="color:rgb(212, 212, 212)">`,`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`validators=[`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`DataRequired(),`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`Email()]),`</span>
 
-<span class="colour" style="color:rgb(212, 212, 212)">password = PasswordField(</span><span class="colour" style="color:rgb(206, 145, 120)">'Password'</span><span class="colour" style="color:rgb(212, 212, 212)">,</span>
-<span class="colour" style="color:rgb(212, 212, 212)">validators=</span>
-<span class="colour" style="color:rgb(212, 212, 212)">DataRequired()),</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`password = PasswordField(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Password'`</span><span class="colour" style="color:rgb(212, 212, 212)">`,`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`validators=`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`DataRequired()),`</span>
 
-<span class="colour" style="color:rgb(212, 212, 212)">confirm\_password = PasswordField(</span><span class="colour" style="color:rgb(206, 145, 120)">'Confirm Password'</span><span class="colour" style="color:rgb(212, 212, 212)">,</span>
-<span class="colour" style="color:rgb(212, 212, 212)">validators=[</span>
-<span class="colour" style="color:rgb(212, 212, 212)">DataRequired(),</span>
-<span class="colour" style="color:rgb(212, 212, 212)">EqualTo(</span><span class="colour" style="color:rgb(206, 145, 120)">'password'</span><span class="colour" style="color:rgb(212, 212, 212)">)])</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`confirm_password = PasswordField(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Confirm Password'`</span><span class="colour" style="color:rgb(212, 212, 212)">`,`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`validators=[`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`DataRequired(),`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`EqualTo(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'password'`</span><span class="colour" style="color:rgb(212, 212, 212)">`)])`</span>
 
-<span class="colour" style="color:rgb(212, 212, 212)">submit = SubmitField(</span><span class="colour" style="color:rgb(206, 145, 120)">'Sign Up'</span><span class="colour" style="color:rgb(212, 212, 212)">)</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`submit = SubmitField(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Sign Up'`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
 
 2\. Secret Key
 
 Add a secret key to your flaskblog.py file
 
-<span class="colour" style="color:rgb(212, 212, 212)">app.config[</span><span class="colour" style="color:rgb(206, 145, 120)">'SECRET\_KEY'</span><span class="colour" style="color:rgb(212, 212, 212)"> = </span><span class="colour" style="color:rgb(206, 145, 120)">' < top secret key goes here > '</span><span class="colour" style="color:rgb(212, 212, 212)">]</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`app.config[`</span><span class="colour" style="color:rgb(206, 145, 120)">`'SECRET_KEY'`</span><span class="colour" style="color:rgb(212, 212, 212)">` = `</span><span class="colour" style="color:rgb(206, 145, 120)">`' < top secret key goes here > '`</span><span class="colour" style="color:rgb(212, 212, 212)">`]`</span>
 
 3.  Import forms in to flaskblog.py
 
 /flaskblog.py
-<span class="colour" style="color:rgb(86, 156, 214)">from</span><span class="colour" style="color:rgb(212, 212, 212)"> forms </span><span class="colour" style="color:rgb(86, 156, 214)">import</span><span class="colour" style="color:rgb(212, 212, 212)"> RegistrationForm, LoginForm</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`from`</span><span class="colour" style="color:rgb(212, 212, 212)">` forms `</span><span class="colour" style="color:rgb(86, 156, 214)">`import`</span><span class="colour" style="color:rgb(212, 212, 212)">` RegistrationForm, LoginForm`</span>
 
 <br>
 4.  Add routes for login and registration
@@ -218,76 +225,244 @@ Start your form with your CSRF token
 
 <span class="colour" style="color:rgb(212, 212, 212)">`{{ form.hidden_tag() }}`</span>
 
-Label - <span class="colour" style="color: rgb(212, 212, 212);">`{{ form.username.label(class=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"classes-go-here"`</span><span class="colour" style="color: rgb(212, 212, 212);">`) }}`</span>
+Label - <span class="colour" style="color:rgb(212, 212, 212)">`{{ form.username.label(class=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"classes-go-here"`</span><span class="colour" style="color:rgb(212, 212, 212)">`) }}`</span>
 
-<span class="colour" style="color: rgb(212, 212, 212);">Field - `{{ form.username(class=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"classes-go-here"`</span><span class="colour" style="color: rgb(212, 212, 212);">`) }}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">Field - `{{ form.username(class=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"classes-go-here"`</span><span class="colour" style="color:rgb(212, 212, 212)">`) }}`</span>
 
 6.  POST requests...
 
 We need to modify the app.route decorator for the destination of our form submission otherwise we get an error that you cannot POST to that URL.
 
-<span class="colour" style="color: rgb(212, 212, 212);">`@app.route(`</span><span class="colour" style="color: rgb(206, 145, 120);">`"/register"`</span><span class="colour" style="color: rgb(212, 212, 212);">`, methods=[`</span><span class="colour" style="color: rgb(206, 145, 120);">`'GET'`</span><span class="colour" style="color: rgb(212, 212, 212);">`, `</span><span class="colour" style="color: rgb(206, 145, 120);">`'POST'`</span><span class="colour" style="color: rgb(212, 212, 212);">`])`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`@app.route(`</span><span class="colour" style="color:rgb(206, 145, 120)">`"/register"`</span><span class="colour" style="color:rgb(212, 212, 212)">`, methods=[`</span><span class="colour" style="color:rgb(206, 145, 120)">`'GET'`</span><span class="colour" style="color:rgb(212, 212, 212)">`, `</span><span class="colour" style="color:rgb(206, 145, 120)">`'POST'`</span><span class="colour" style="color:rgb(212, 212, 212)">`])`</span>
 
 <br>
 7.  Form Validation
 
 In our POST route we can validate the incoming form and for now we pass a flash message to confirm post.
-<span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` form.validate_on_submit():`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`flash(`</span><span class="colour" style="color: rgb(86, 156, 214);">`f`</span><span class="colour" style="color: rgb(206, 145, 120);">`'Account created for `</span><span class="colour" style="color: rgb(212, 212, 212);">`{form.username.data}`</span><span class="colour" style="color: rgb(206, 145, 120);">`!'`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`if`</span><span class="colour" style="color:rgb(212, 212, 212)">` form.validate_on_submit():`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`flash(`</span><span class="colour" style="color:rgb(86, 156, 214)">`f`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Account created for `</span><span class="colour" style="color:rgb(212, 212, 212)">`{form.username.data}`</span><span class="colour" style="color:rgb(206, 145, 120)">`!'`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
 
-<span class="colour" style="color: rgb(212, 212, 212);">make sure to import flash</span>
-<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flask `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` Flask, render_template, url_for, flash`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">make sure to import flash</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`from`</span><span class="colour" style="color:rgb(212, 212, 212)">`flask`</span><span class="colour" style="color:rgb(86, 156, 214)">`import`</span><span class="colour" style="color:rgb(212, 212, 212)">` Flask, render_template, url_for, flash`</span>
 
 Now if we want to see these messages in the browser we have to put some html in to our layout template.  We can also pass in a class by using the category argument in the flash function
-<span class="colour" style="color: rgb(212, 212, 212);">`flash(`</span><span class="colour" style="color: rgb(86, 156, 214);">`f`</span><span class="colour" style="color: rgb(206, 145, 120);">`'Account created for `</span><span class="colour" style="color: rgb(212, 212, 212);">`{form.username.data}`</span><span class="colour" style="color: rgb(206, 145, 120);">`!', 'success'`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`flash(`</span><span class="colour" style="color:rgb(86, 156, 214)">`f`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Account created for `</span><span class="colour" style="color:rgb(212, 212, 212)">`{form.username.data}`</span><span class="colour" style="color:rgb(206, 145, 120)">`!', 'success'`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
 
 So here we are passing the word success in as the message category and we can then use that as a class to style the message.  So success could be gree/blue and invalid can be red or whatever.
 
 <br>
 /layout.html
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`with`</span><span class="colour" style="color: rgb(212, 212, 212);">` messages = get_flashed_messages(with_categories=`</span><span class="colour" style="color: rgb(86, 156, 214);">`true`</span><span class="colour" style="color: rgb(212, 212, 212);">`) %}`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` messages %}`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`for`</span><span class="colour" style="color: rgb(212, 212, 212);">` category, message `</span><span class="colour" style="color: rgb(86, 156, 214);">`in`</span><span class="colour" style="color: rgb(212, 212, 212);">` messages %}`</span>
-<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`div`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"alert alert-{{ category }}"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{{ message }}`</span>
-<span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`div`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`endfor`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`endif`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`endwith`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`with`</span><span class="colour" style="color:rgb(212, 212, 212)">` messages = get_flashed_messages(with_categories=`</span><span class="colour" style="color:rgb(86, 156, 214)">`true`</span><span class="colour" style="color:rgb(212, 212, 212)">`) %}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`if`</span><span class="colour" style="color:rgb(212, 212, 212)">` messages %}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`for`</span><span class="colour" style="color:rgb(212, 212, 212)">`category, message`</span><span class="colour" style="color:rgb(86, 156, 214)">`in`</span><span class="colour" style="color:rgb(212, 212, 212)">` messages %}`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`<`</span><span class="colour" style="color:rgb(86, 156, 214)">`div`</span><span class="colour" style="color:rgb(212, 212, 212)"></span><span class="colour" style="color:rgb(156, 220, 254)">`class`</span><span class="colour" style="color:rgb(212, 212, 212)">`=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"alert alert-{{ category }}"`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{{ message }}`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`</`</span><span class="colour" style="color:rgb(86, 156, 214)">`div`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`endfor`</span><span class="colour" style="color:rgb(212, 212, 212)">` %}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`endif`</span><span class="colour" style="color:rgb(212, 212, 212)">` %}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`endwith`</span><span class="colour" style="color:rgb(212, 212, 212)">` %}`</span>
 
 8\. User Validation in the HTML form
 
 It would be better if the user got feedback while filling out the form instead of waiting for submit.  Also, it takes some of the weight off of our server and utilizes their browser.
 
 One Example in /register.html
-<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`div`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"form-group"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{{ form.username.label(class=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"form-control-label"`</span><span class="colour" style="color: rgb(212, 212, 212);">`) }}`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`<`</span><span class="colour" style="color:rgb(86, 156, 214)">`div`</span><span class="colour" style="color:rgb(212, 212, 212)"></span><span class="colour" style="color:rgb(156, 220, 254)">`class`</span><span class="colour" style="color:rgb(212, 212, 212)">`=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"form-group"`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{{ form.username.label(class=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"form-control-label"`</span><span class="colour" style="color:rgb(212, 212, 212)">`) }}`</span>
 
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` form.username.errors %}`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{{ form.username(class=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"form-control form-control-lg is-invalid"`</span><span class="colour" style="color: rgb(212, 212, 212);">`) }}`</span>
-<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`div`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"invalid-feedback"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`for`</span><span class="colour" style="color: rgb(212, 212, 212);">` error `</span><span class="colour" style="color: rgb(86, 156, 214);">`in`</span><span class="colour" style="color: rgb(212, 212, 212);">` form.username.errors %}`</span>
-<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`span`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`{{ error }}`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`span`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`endfor`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
-<span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`div`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`else`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{{ form.username(class=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"form-control form-control-lg"`</span><span class="colour" style="color: rgb(212, 212, 212);">`) }}`</span>
-<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`endif`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
-<span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`div`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`if`</span><span class="colour" style="color:rgb(212, 212, 212)">` form.username.errors %}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{{ form.username(class=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"form-control form-control-lg is-invalid"`</span><span class="colour" style="color:rgb(212, 212, 212)">`) }}`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`<`</span><span class="colour" style="color:rgb(86, 156, 214)">`div`</span><span class="colour" style="color:rgb(212, 212, 212)"></span><span class="colour" style="color:rgb(156, 220, 254)">`class`</span><span class="colour" style="color:rgb(212, 212, 212)">`=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"invalid-feedback"`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`for`</span><span class="colour" style="color:rgb(212, 212, 212)">`error`</span><span class="colour" style="color:rgb(86, 156, 214)">`in`</span><span class="colour" style="color:rgb(212, 212, 212)">` form.username.errors %}`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`<`</span><span class="colour" style="color:rgb(86, 156, 214)">`span`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span><span class="colour" style="color:rgb(212, 212, 212)">`{{ error }}`</span><span class="colour" style="color:rgb(128, 128, 128)">`</`</span><span class="colour" style="color:rgb(86, 156, 214)">`span`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`endfor`</span><span class="colour" style="color:rgb(212, 212, 212)">` %}`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`</`</span><span class="colour" style="color:rgb(86, 156, 214)">`div`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`else`</span><span class="colour" style="color:rgb(212, 212, 212)">` %}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{{ form.username(class=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"form-control form-control-lg"`</span><span class="colour" style="color:rgb(212, 212, 212)">`) }}`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`{% `</span><span class="colour" style="color:rgb(86, 156, 214)">`endif`</span><span class="colour" style="color:rgb(212, 212, 212)">` %}`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`</`</span><span class="colour" style="color:rgb(86, 156, 214)">`div`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
 
 For login we copy and paste and modify.  The route for login will have to wait until database is up and running.
 For the sake of an example to test we put in a hardcoded user info to test the validation messages.
 
 9.  Nav Bar clean up, we can use url\_for() to pass routes in to links in our nav bar.
-<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`a `</span><span class="colour" style="color: rgb(156, 220, 254);">`href`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"{{ url_for('about') }}"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`About`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+<span class="colour" style="color:rgb(128, 128, 128)">`<`</span><span class="colour" style="color:rgb(86, 156, 214)">`a `</span><span class="colour" style="color:rgb(156, 220, 254)">`href`</span><span class="colour" style="color:rgb(212, 212, 212)">`=`</span><span class="colour" style="color:rgb(206, 145, 120)">`"{{ url_for('about') }}"`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span><span class="colour" style="color:rgb(212, 212, 212)">`About`</span><span class="colour" style="color:rgb(128, 128, 128)">`</`</span><span class="colour" style="color:rgb(86, 156, 214)">`a`</span><span class="colour" style="color:rgb(128, 128, 128)">`>`</span>
 <br>
-# Database with Flask-SQL-Alchmey
+# Database with Flask-SQL-Alchemy
 
+1.  Setup
 SQL Alchemy is an ORM, object relational mapper.  Makes it much easier to work with SQL.  Just like Mongoose for MongoDB.
 
 Install flask sql alchemy
 
 `% pip install flask-sqlalchemy`
+
+Import it in to your project file
+
+/flaskblog.py
+
+<span class="colour" style="color:rgb(86, 156, 214)">`from`</span><span class="colour" style="color:rgb(212, 212, 212)">`flask_sqlalchemy`</span><span class="colour" style="color:rgb(86, 156, 214)">`import`</span><span class="colour" style="color:rgb(212, 212, 212)">` SQLAlchemy`</span>
+
+For Development purposes we will use a SQLite file locally and tell the app to look for the Database using the database URI config variable.
+
+/flaskblog.py
+<span class="colour" style="color:rgb(212, 212, 212)">`app.config[`</span><span class="colour" style="color:rgb(206, 145, 120)">`'SQLALCHEMY_DATABASE_URI'`</span><span class="colour" style="color:rgb(212, 212, 212)">`] = `</span><span class="colour" style="color:rgb(206, 145, 120)">`'sqlite:///site.db'`</span>
+
+and we need an instance of our database which we will call 'db'
+
+<span class="colour" style="color:rgb(212, 212, 212)">`db = SQLAlchemy(app)`</span>
+
+2.  Models
+Now in SQL we have tabels and using this ORM we can make python classes in to those tables for which we call them "Models"
+
+These classes inherit the Model class from our db instance.  `class User(db.Model):`
+We use the method of column to indicate a column on the SQL table and then the first argument is the type of data in the column.  db.Integer or db.String etc.  Next we can add whatever kwargs we want for this column
+
+Interestingly, we can set a relationship field for a class to indicate that it has a one to many relationship to another table.  In SQL you only indicate the relationship from the 'many' table by using the foreign key of the 'one' table.  We aren't doing anything different using SQL but we are creating a behind the scenes query with our relationship field on the User class.  Which is why it is called "db.relationship" and we call it "author" when looking it up.
+
+\_\_repr\_\_ method is similar to \_\_str\_\_ method but the idea is that the repr method is for development and the str method is more for the end user.
+
+<span class="colour" style="color:rgb(86, 156, 214)">`class`</span><span class="colour" style="color:rgb(212, 212, 212)">` User(db.Model):`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`id = db.Column(db.Integer, primary_key=`</span><span class="colour" style="color:rgb(86, 156, 214)">`True`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`username = db.Column(db.String(`</span><span class="colour" style="color:rgb(181, 206, 168)">`20`</span><span class="colour" style="color:rgb(212, 212, 212)">`), unique=`</span><span class="colour" style="color:rgb(86, 156, 214)">`True`</span><span class="colour" style="color:rgb(212, 212, 212)">`, nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`email = db.Column(db.String(`</span><span class="colour" style="color:rgb(181, 206, 168)">`120`</span><span class="colour" style="color:rgb(212, 212, 212)">`), unique=`</span><span class="colour" style="color:rgb(86, 156, 214)">`True`</span><span class="colour" style="color:rgb(212, 212, 212)">`, nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`image_file = db.Column(db.String(`</span><span class="colour" style="color:rgb(181, 206, 168)">`20`</span><span class="colour" style="color:rgb(212, 212, 212)">`), nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`, default=`</span><span class="colour" style="color:rgb(206, 145, 120)">`'default.jpg'`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`password = db.Column(db.String(`</span><span class="colour" style="color:rgb(181, 206, 168)">`60`</span><span class="colour" style="color:rgb(212, 212, 212)">`), nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(106, 153, 85)">`#___ Relationship to posts`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`posts = db.relationship(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'Post'`</span><span class="colour" style="color:rgb(212, 212, 212)">`, backref=`</span><span class="colour" style="color:rgb(206, 145, 120)">`'author'`</span><span class="colour" style="color:rgb(212, 212, 212)">`, lazy=`</span><span class="colour" style="color:rgb(86, 156, 214)">`True`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+
+<span class="colour" style="color:rgb(86, 156, 214)">`def`</span><span class="colour" style="color:rgb(212, 212, 212)">` __repr__(self):`</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`return`</span><span class="colour" style="color:rgb(212, 212, 212)"></span><span class="colour" style="color:rgb(86, 156, 214)">`f`</span><span class="colour" style="color:rgb(206, 145, 120)">`"User('`</span><span class="colour" style="color:rgb(212, 212, 212)">`{ `</span><span class="colour" style="color:rgb(86, 156, 214)">`self`</span><span class="colour" style="color:rgb(212, 212, 212)">`.username }`</span><span class="colour" style="color:rgb(206, 145, 120)">`','`</span><span class="colour" style="color:rgb(212, 212, 212)">`{ `</span><span class="colour" style="color:rgb(86, 156, 214)">`self`</span><span class="colour" style="color:rgb(212, 212, 212)">`.email }`</span><span class="colour" style="color:rgb(206, 145, 120)">`', '`</span><span class="colour" style="color:rgb(212, 212, 212)">`{ `</span><span class="colour" style="color:rgb(86, 156, 214)">`self`</span><span class="colour" style="color:rgb(212, 212, 212)">`.image_file }`</span><span class="colour" style="color:rgb(206, 145, 120)">`' )"`</span>
+
+<span class="colour" style="color:rgb(86, 156, 214)">`class`</span><span class="colour" style="color:rgb(212, 212, 212)">` Post(db.Model):`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`id = db.Column(db.Integer, primary_key=`</span><span class="colour" style="color:rgb(86, 156, 214)">`True`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`title = db.Column(db.String(`</span><span class="colour" style="color:rgb(181, 206, 168)">`100`</span><span class="colour" style="color:rgb(212, 212, 212)">`), nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`date_posted = db.Column(db.DateTime, nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`, default=datetime.utcnow)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`content = db.Column(db.Text, nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+<span class="colour" style="color:rgb(212, 212, 212)">`user_id = db.Column(db.Integer, db.ForeignKey(`</span><span class="colour" style="color:rgb(206, 145, 120)">`'user.id'`</span><span class="colour" style="color:rgb(212, 212, 212)">`), nullable=`</span><span class="colour" style="color:rgb(86, 156, 214)">`False`</span><span class="colour" style="color:rgb(212, 212, 212)">`)`</span>
+
+<span class="colour" style="color:rgb(86, 156, 214)">`def`</span><span class="colour" style="color:rgb(212, 212, 212)">` __repr__(self):`</span>
+<span class="colour" style="color:rgb(86, 156, 214)">`return`</span><span class="colour" style="color:rgb(212, 212, 212)"></span><span class="colour" style="color:rgb(86, 156, 214)">`f`</span><span class="colour" style="color:rgb(206, 145, 120)">`"Post('`</span><span class="colour" style="color:rgb(212, 212, 212)">`{ `</span><span class="colour" style="color:rgb(86, 156, 214)">`self`</span><span class="colour" style="color:rgb(212, 212, 212)">`.title }`</span><span class="colour" style="color:rgb(206, 145, 120)">`','`</span><span class="colour" style="color:rgb(212, 212, 212)">`{ `</span><span class="colour" style="color:rgb(86, 156, 214)">`self`</span><span class="colour" style="color:rgb(212, 212, 212)">`.date_posted }`</span><span class="colour" style="color:rgb(206, 145, 120)">`')"`</span>
+
+3.  Database Actions
+
+In the flask shell we can create an instance based on our models.
+
+We can create a database where it will make tables based on our models with
+
+`db.create_all()`
+
+`user_1 = User(username="johndoe", email="`[`myemail@example.com`](mailto:myemail@example.com)`", password="password")`
+Now we have a variable with an instance stored called user\_1
+We can add it to a staging area in the database
+`db.session.add(user_1)`
+We can add more here or modify and when we are done we can commit the changes
+`db.session.commit()`
+
+Once we have more data in the database we can use these commands and also store lists or individual items in variables.
+
+`User.query.all()` // --> Grabs all users
+`User.query.first()` //--> Grabs the first user
+`User.query.filter_by(username='johnDoe').all() ` // --> Grabs all users with that username and puts them in a list
+`User.query.filter_by(username="johnDoe".first()` // --> Grabs only the fist user with that username and does not put it in a list
+`User.query.get(1)` --> Grabs a user by the id of 1
+
+Once we have posts we can use similar queries to grab them but with the relationship field from our user model we can also grab them from a user instance.
+`user = User.query.get(1)`
+`user.posts` //--> This will show us all the posts that this user has
+`post = Post.query.first()`
+`post.user_id` // --> This shows the user id of the author of the post
+`post.author` // --> Grabs the entire user object associated with this post
+
+We can delete the whole database by using
+`db.drop_all()`
+To start with a clean slate we can do
+`db.create_all()`
+and now we have all the tables but no info.
+
+# Package Structuring
+
+So far we have been running our server with out it being in a package.  There are pros and cons to this but as we scale the app we will need to be in a package.  I'm a little confused by the explanation but here is the solution.  I want to reorder this outline so that this part is at the beginning so we can have more of a blank canvas to make our app.  Also the dependency installations in that chapter too.
+
+Old Tree:
+/static
+    main.css
+/templates
+    \<templates here>
+flaskblog.py
+forms.py
+site.db
+
+New Tree:
+/flaskblog
+    \_\_init\_\_.py
+    forms.py
+    models.py
+    routes.py
+    site.db
+    /static
+        main.css
+    /templates
+        about.html
+        home.html
+        layout.html
+        login.html
+        register.html
+   run.py
+
+So we have moved our models in to a models.py file and our routes in to a routes.py, some of our logic has now gone in to the init.py and the run.py file.  Obviously we need to revise all of our import statements.
+
+Let's look at run.py and /flaskblog/\_\_init\_\_.py
+
+/run.py
+from flaskblog import app
+if \_\_name\_\_ == '\_\_main\_\_':
+    app.run(debug=True)
+
+/\_\_init\_\_.py
+from flask import Flask
+from flask\_sqlalchemy import SQLAlchemy
+
+app = Flask(\_\_name\_\_)
+app.config['SECRET\_KEY'] = 'secret string of chracters'
+app.config['SQLALCHEMY\_DATABASE\_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
+
+from flaskblog import routes
+
+So the run file just initiates the process by running our Flask instance called App.
+
+Init sets up all the config variables we need, sets up our db connection with variable db.
+
+Dependencies in Routes... As you can see in the init file we dumped our routes in to another file.
+
+/routes.py
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flask `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` render_template, url_for, flash, redirect`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flaskblog `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` app`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flaskblog.forms `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` RegistrationForm, LoginForm`</span>
+<span class="colour" style="color: rgb(106, 153, 85);">`#___ Models`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flaskblog.models `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` User, Post`</span>
+
+and we have dependencies in models.py
+
+/models.py
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flaskblog `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` db`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` datetime `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` datetime`</span>
+
+If we delete site.db and re establish the database it will be created in our project folder instead of the main directory because it is created in the same folder as the config variables.
+
+<br>
+# User Auth
+<br>
+We need to hash our passwords, lets install bcrypt
+
+`% pip install flask-bcrypt`
+
+flask shell...
+from flask\_bcrypt import Bcrypt
+bcrypt = Bcrypt()
+bcrypt.generate\_password\_hash('testing') --> hashed password with a b in front of it
+bcrypt.generate\_password\_hash('testing').decode() --> hashed password with out the b and just a string
 
 <br>
 <br>

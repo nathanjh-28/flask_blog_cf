@@ -1,11 +1,10 @@
-#__ This imports the module Flask and makes an instance of it called app.
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-app = Flask(__name__)
+from flask import render_template, url_for, flash, redirect
+from flaskblog import app
+from flaskblog.forms import RegistrationForm, LoginForm
+#___ Models
+from flaskblog.models import User, Post
 
 
-#___ not so secret key
-app.config['SECRET_KEY'] = 'asjldhfalkjsdhfjashdljfkha'
 
 #__ "dummy" data
 posts = [
@@ -50,11 +49,3 @@ def login():
     # else:
         # flash('login uncucessful', 'danger')
     return render_template('login.html', title='Login', form=form)
-
-
-
-
-#__ This allows you to not have to set your environment variable every time you open a new terminal to run your server.  You can just type python flaskblog.py to run it.
-if __name__ == '__main__':
-    app.run(debug=True)
-
