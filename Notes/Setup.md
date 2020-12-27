@@ -778,11 +778,86 @@ Modify our picture download function
 <span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> picture\_fn</span>
 
 <br>
+# CRUD on Posts Model
 <br>
-<br>
-<br>
-<br>
-<br>
+Goodbye Dummy Data!!!
+
+1.  Need to create a new post route, template, form, and a link to the create post form.
+
+/forms.py
+<span class="colour" style="color: rgb(86, 156, 214);">from</span><span class="colour" style="color: rgb(212, 212, 212);"> wtforms </span><span class="colour" style="color: rgb(86, 156, 214);">import</span><span class="colour" style="color: rgb(212, 212, 212);"> ....TextAreaField</span>
+<...>
+<span class="colour" style="color: rgb(86, 156, 214);">class</span><span class="colour" style="color: rgb(212, 212, 212);"> PostForm(FlaskForm):</span>
+<span class="colour" style="color: rgb(212, 212, 212);">title = StringField(</span><span class="colour" style="color: rgb(206, 145, 120);">'Title'</span><span class="colour" style="color: rgb(212, 212, 212);">, validators=[DataRequired()])</span>
+<span class="colour" style="color: rgb(212, 212, 212);">content = TextAreaField(</span><span class="colour" style="color: rgb(206, 145, 120);">'Content'</span><span class="colour" style="color: rgb(212, 212, 212);">, validators[DataRequired()])</span>
+<span class="colour" style="color: rgb(212, 212, 212);">submit = SubmitField(</span><span class="colour" style="color: rgb(206, 145, 120);">'Post'</span><span class="colour" style="color: rgb(212, 212, 212);">)</span>
+
+/layout.html
+<span class="colour" style="color: rgb(128, 128, 128);"><</span><span class="colour" style="color: rgb(86, 156, 214);">a</span><span class="colour" style="color: rgb(212, 212, 212);"> </span><span class="colour" style="color: rgb(156, 220, 254);">class</span><span class="colour" style="color: rgb(212, 212, 212);">=</span><span class="colour" style="color: rgb(206, 145, 120);">"nav-item nav-link"</span><span class="colour" style="color: rgb(212, 212, 212);"> </span><span class="colour" style="color: rgb(156, 220, 254);">href</span><span class="colour" style="color: rgb(212, 212, 212);">=</span><span class="colour" style="color: rgb(206, 145, 120);">"{{ url\_for('new\_post') }}"</span><span class="colour" style="color: rgb(128, 128, 128);">></span><span class="colour" style="color: rgb(212, 212, 212);">New Post</span><span class="colour" style="color: rgb(128, 128, 128);"></</span><span class="colour" style="color: rgb(86, 156, 214);">a</span><span class="colour" style="color: rgb(128, 128, 128);">></span>
+
+/routes.py
+<span class="colour" style="color: rgb(86, 156, 214);">from</span><span class="colour" style="color: rgb(212, 212, 212);"> flaskblog.forms </span><span class="colour" style="color: rgb(86, 156, 214);">import</span><span class="colour" style="color: rgb(212, 212, 212);"> ... PostForm</span>
+
+New Post Route
+
+<span class="colour" style="color: rgb(212, 212, 212);">@app.route(</span><span class="colour" style="color: rgb(206, 145, 120);">"/post/new"</span><span class="colour" style="color: rgb(212, 212, 212);">, methods=[</span><span class="colour" style="color: rgb(206, 145, 120);">'GET'</span><span class="colour" style="color: rgb(212, 212, 212);">,</span><span class="colour" style="color: rgb(206, 145, 120);">'POST'</span><span class="colour" style="color: rgb(212, 212, 212);">])</span>
+<span class="colour" style="color: rgb(212, 212, 212);">@login\_required</span>
+<span class="colour" style="color: rgb(86, 156, 214);">def</span><span class="colour" style="color: rgb(212, 212, 212);"> new\_post():</span>
+<span class="colour" style="color: rgb(212, 212, 212);">    form = PostForm()</span>
+<span class="colour" style="color: rgb(86, 156, 214);">    if</span><span class="colour" style="color: rgb(212, 212, 212);"> form.validate\_on\_submit():</span>
+<span class="colour" style="color: rgb(212, 212, 212);">        new\_p = Post(</span>
+<span class="colour" style="color: rgb(212, 212, 212);">           title=form.title.data,</span>
+<span class="colour" style="color: rgb(212, 212, 212);">           content=form.content.data,</span>
+<span class="colour" style="color: rgb(212, 212, 212);">           author=current\_user )</span>
+<span class="colour" style="color: rgb(212, 212, 212);">           db.session.add(new\_p)</span>
+<span class="colour" style="color: rgb(212, 212, 212);">           db.session.commit()</span>
+<span class="colour" style="color: rgb(212, 212, 212);">           flash(</span><span class="colour" style="color: rgb(206, 145, 120);">'Your post has been created!'</span><span class="colour" style="color: rgb(212, 212, 212);">, </span><span class="colour" style="color: rgb(206, 145, 120);">'success'</span><span class="colour" style="color: rgb(212, 212, 212);"> )</span>
+<span class="colour" style="color: rgb(212, 212, 212);">           </span><span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> redirect(url\_for(</span><span class="colour" style="color: rgb(206, 145, 120);">'home'</span><span class="colour" style="color: rgb(212, 212, 212);">))</span>
+<span class="colour" style="color: rgb(86, 156, 214);">    return</span><span class="colour" style="color: rgb(212, 212, 212);"> render\_template(</span><span class="colour" style="color: rgb(206, 145, 120);">'create\_post.html'</span><span class="colour" style="color: rgb(212, 212, 212);">, title=</span><span class="colour" style="color: rgb(206, 145, 120);">'New Post'</span><span class="colour" style="color: rgb(212, 212, 212);">, form=form)</span>
+
+Adjust the home page to display the posts better
+
+2.  Post Show Page
+We can pass a variable in to the url pattern
+@app.route("/post/<post\_id>")
+We can also designate an integer with int:
+@app.route("/post/<int:post\_id>")
+
+We can pass ids in our url\_for function url\_for('post', post\_id=post.id)
+
+we also have a new query that is Post.query.get\_or\_404(post.id)... if there are not any posts you get a 404 error.
+
+The Route:
+<span class="colour" style="color: rgb(212, 212, 212);">@app.route(</span><span class="colour" style="color: rgb(206, 145, 120);">"/post/<int:post\_id>"</span><span class="colour" style="color: rgb(212, 212, 212);">)</span>
+<span class="colour" style="color: rgb(86, 156, 214);">def</span><span class="colour" style="color: rgb(212, 212, 212);"> post(post\_id):</span>
+<span class="colour" style="color: rgb(212, 212, 212);">post = Post.query.get\_or\_404(post\_id)</span>
+<span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> render\_template(</span><span class="colour" style="color: rgb(206, 145, 120);">'post.html'</span><span class="colour" style="color: rgb(212, 212, 212);">, title=post.title, post=post)</span>
+
+3.  Update Post
+
+import abort from flask
+<span class="colour" style="color: rgb(86, 156, 214);">from</span><span class="colour" style="color: rgb(212, 212, 212);"> flask </span><span class="colour" style="color: rgb(86, 156, 214);">import </span><span class="colour" style="color: rgb(212, 212, 212);">... abort</span>
+
+This will allow us to abort the request if a user is trying to edit another user's post.
+
+<span class="colour" style="color: rgb(212, 212, 212);">@login\_required</span>
+<span class="colour" style="color: rgb(212, 212, 212);">@app.route(</span><span class="colour" style="color: rgb(206, 145, 120);">"/post/<int:post\_id>/update"</span><span class="colour" style="color: rgb(212, 212, 212);">,, methods=[</span><span class="colour" style="color: rgb(206, 145, 120);">'GET'</span><span class="colour" style="color: rgb(212, 212, 212);">,</span><span class="colour" style="color: rgb(206, 145, 120);">'POST'</span><span class="colour" style="color: rgb(212, 212, 212);">])</span>
+<span class="colour" style="color: rgb(86, 156, 214);">def</span><span class="colour" style="color: rgb(212, 212, 212);"> update\_post(post\_id):</span>
+    <span class="colour" style="color: rgb(212, 212, 212);">post = Post.query.get\_or\_404(post\_id)</span>
+    <span class="colour" style="color: rgb(86, 156, 214);">if</span><span class="colour" style="color: rgb(212, 212, 212);"> post.author != current\_user:</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">abort(</span><span class="colour" style="color: rgb(181, 206, 168);">403</span><span class="colour" style="color: rgb(212, 212, 212);">)</span>
+    <span class="colour" style="color: rgb(212, 212, 212);">form = PostForm()</span>
+    <span class="colour" style="color: rgb(86, 156, 214);">if</span><span class="colour" style="color: rgb(212, 212, 212);"> form.validate\_on\_submit():</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">post.title = form.title.data</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">post.content = form.content.data</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">db.session.commit()</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">flash(</span><span class="colour" style="color: rgb(206, 145, 120);">'Your post has been updated'</span><span class="colour" style="color: rgb(212, 212, 212);">, </span><span class="colour" style="color: rgb(206, 145, 120);">'success'</span><span class="colour" style="color: rgb(212, 212, 212);">)</span>
+        <span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> redirect(url\_for(</span><span class="colour" style="color: rgb(206, 145, 120);">'post'</span><span class="colour" style="color: rgb(212, 212, 212);">, post\_id=post.id))</span>
+    <span class="colour" style="color: rgb(86, 156, 214);">elif</span><span class="colour" style="color: rgb(212, 212, 212);"> request.method == </span><span class="colour" style="color: rgb(206, 145, 120);">'GET'</span><span class="colour" style="color: rgb(212, 212, 212);">:</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">form.title.data = post.title</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">form.content.data = post.content</span>
+    <span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> render\_template(</span><span class="colour" style="color: rgb(206, 145, 120);">'create\_post.html'</span><span class="colour" style="color: rgb(212, 212, 212);">, title=</span><span class="colour" style="color: rgb(206, 145, 120);">'Update Post'</span><span class="colour" style="color: rgb(212, 212, 212);">, legend=</span><span class="colour" style="color: rgb(206, 145, 120);">'Update Post'</span><span class="colour" style="color: rgb(212, 212, 212);">, form=form)</span>
+
 <br>
 <br>
 <br>
