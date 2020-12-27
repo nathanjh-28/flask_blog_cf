@@ -870,9 +870,17 @@ show and hide links in templates...
 He's making a delete confirmation modal that has a form submit button.  The action in the form needs to go to the delete route.
 
 Make a delete route
+<span class="colour" style="color: rgb(212, 212, 212);">@login\_required</span>
+<span class="colour" style="color: rgb(212, 212, 212);">@app.route(</span><span class="colour" style="color: rgb(206, 145, 120);">"/post/<int:post\_id>/delete"</span><span class="colour" style="color: rgb(212, 212, 212);">, methods=[</span><span class="colour" style="color: rgb(206, 145, 120);">'POST'</span><span class="colour" style="color: rgb(212, 212, 212);">])</span>
+<span class="colour" style="color: rgb(86, 156, 214);">def</span><span class="colour" style="color: rgb(212, 212, 212);"> delete\_post(post\_id):</span>
+<span class="colour" style="color: rgb(212, 212, 212);">    post = Post.query.get\_or\_404(post\_id)</span>
+<span class="colour" style="color: rgb(86, 156, 214);">    if</span><span class="colour" style="color: rgb(212, 212, 212);"> post.author != current\_user:</span>
+<span class="colour" style="color: rgb(212, 212, 212);">         abort(</span><span class="colour" style="color: rgb(181, 206, 168);">403</span><span class="colour" style="color: rgb(212, 212, 212);">)</span>
+<span class="colour" style="color: rgb(212, 212, 212);">    db.session.delete(post)</span>
+<span class="colour" style="color: rgb(212, 212, 212);">    db.session.commit()</span>
+<span class="colour" style="color: rgb(212, 212, 212);">    flash(</span><span class="colour" style="color: rgb(206, 145, 120);">'Your post has been deleted'</span><span class="colour" style="color: rgb(212, 212, 212);">, </span><span class="colour" style="color: rgb(206, 145, 120);">'success'</span><span class="colour" style="color: rgb(212, 212, 212);">)</span>
+<span class="colour" style="color: rgb(86, 156, 214);">    return</span><span class="colour" style="color: rgb(212, 212, 212);"> redirect(url\_for(</span><span class="colour" style="color: rgb(206, 145, 120);">'home'</span><span class="colour" style="color: rgb(212, 212, 212);">))</span>
 
-<br>
-<br>
 <br>
 <br>
 <br>
