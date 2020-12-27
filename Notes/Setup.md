@@ -2,6 +2,7 @@ boilerplate checklist:
 install dependencies (make a list)
 files and folder structure
 database connection and other needed variables
+set up template inheritence and link up stylesheet
 basic routes
 user model and auth
 <br>
@@ -462,12 +463,192 @@ flask shell...
 from flask\_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 bcrypt.generate\_password\_hash('testing') --> hashed password with a b in front of it
-bcrypt.generate\_password\_hash('testing').decode() --> hashed password with out the b and just a string
+bcrypt.generate\_password\_hash('testing')<span class="colour" style="color: rgb(212, 212, 212);">.decode(</span><span class="colour" style="color: rgb(206, 145, 120);">'utf-8'</span><span class="colour" style="color: rgb(212, 212, 212);">)</span> --> hashed password with out the b and just a string
+
+1.  Hashing passwords
+
+import Bcrypt and set variable in our init package file
+/\_\_init\_\_.py
+<span class="colour" style="color: rgb(86, 156, 214);">from</span><span class="colour" style="color: rgb(212, 212, 212);"> flask\_bcrypt </span><span class="colour" style="color: rgb(86, 156, 214);">import</span><span class="colour" style="color: rgb(212, 212, 212);"> Bcrypt</span>
+<span class="colour" style="color: rgb(212, 212, 212);">bcrypt = Bcrypt(app)</span>
+
+import bcrypt variable to routes file
+/routes.py
+from flaskblog import app, db, bcrypt
+
+Here is our revised register route with bcrypt and adding a user to the db
+<span class="colour" style="color: rgb(212, 212, 212);">`@app.route(`</span><span class="colour" style="color: rgb(206, 145, 120);">`"/register"`</span><span class="colour" style="color: rgb(212, 212, 212);">`, methods=[`</span><span class="colour" style="color: rgb(206, 145, 120);">`'GET'`</span><span class="colour" style="color: rgb(212, 212, 212);">`, `</span><span class="colour" style="color: rgb(206, 145, 120);">`'POST'`</span><span class="colour" style="color: rgb(212, 212, 212);">`])`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`def`</span><span class="colour" style="color: rgb(212, 212, 212);">` register():`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`    form = RegistrationForm()`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`    if`</span><span class="colour" style="color: rgb(212, 212, 212);">` form.validate_on_submit():`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'utf-8'`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`        new_user = User(username=form.username.data, email=form.email.data, password=hashed_pw)`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`        db.session.add(new_user)`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`        db.session.commit()`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`        flash(`</span><span class="colour" style="color: rgb(86, 156, 214);">`f`</span><span class="colour" style="color: rgb(206, 145, 120);">`'Your account has been created!  You are able to login,'`</span><span class="colour" style="color: rgb(212, 212, 212);">`success`</span><span class="colour" style="color: rgb(206, 145, 120);">`')`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`        return`</span><span class="colour" style="color: rgb(212, 212, 212);">` redirect(url_for(login))`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`    return`</span><span class="colour" style="color: rgb(212, 212, 212);">` render_template(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'register.html'`</span><span class="colour" style="color: rgb(212, 212, 212);">`, title=`</span><span class="colour" style="color: rgb(206, 145, 120);">`'Register'`</span><span class="colour" style="color: rgb(212, 212, 212);">`, form=form)`</span>
+
+2.  Validate unique username and email
+
+We need to add some validation so that users can't select a username that is taken or email etc.  We can do this in our forms.py
+
+/forms.py
+
+Need validation error from wtforms
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` wtforms.validators `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` ... ValidationError`</span>
+Need user model from models
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flaskblog.models `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` User`</span>
+
+`class RegistrationForm(FlaskForm):`
+`...`
+        <span class="colour" style="color: rgb(86, 156, 214);">`def`</span><span class="colour" style="color: rgb(212, 212, 212);">` validate_username(self, username):`</span>
+            <span class="colour" style="color: rgb(212, 212, 212);">`user = User.query.filter_by(username=username.data).first()`</span>
+            <span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` user:`</span>
+                <span class="colour" style="color: rgb(86, 156, 214);">`raise`</span><span class="colour" style="color: rgb(212, 212, 212);">` ValidationError(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'That username is taken.  Please choose a different one'`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+
+<span class="colour" style="color: rgb(86, 156, 214);">`    def`</span><span class="colour" style="color: rgb(212, 212, 212);">` validate_email(self, email):`</span>
+            <span class="colour" style="color: rgb(212, 212, 212);">`user = User.query.filter_by(email=email.data).first()`</span>
+            <span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` user:`</span>
+                <span class="colour" style="color: rgb(86, 156, 214);">`raise`</span><span class="colour" style="color: rgb(212, 212, 212);">` ValidationError(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'That email is taken.  Please choose a different one'`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+
+3.  Login package
+This package handles sessions in the background so you don't have to!
+
+% pip install flask-login
+
+/\_\_init\_\_.py
+
+#\_\_\_ imports
+from flask\_login import LoginManager
+...
+#\_\_\_ instances
+login\_manager = LoginManager(app)
+
+So now we head on over to our /models.py file and import the login manager from the init file.
+
+/models.py
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flaskblog `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` db, login_manager`</span>
+
+Now in order for us to use the login manager we have to make a function that get's a user id and tag it with the login manager decorator
+
+<span class="colour" style="color: rgb(212, 212, 212);">`@login_manager.user_loader`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`def`</span><span class="colour" style="color: rgb(212, 212, 212);">` load_user(user_id):`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`    return`</span><span class="colour" style="color: rgb(212, 212, 212);">` User.query.get(int(user_id))`</span>
+
+So we need to add 4 methods to our User class but thankfully we can just import them from flask-login
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flask_login `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` UserMixin`</span>
+
+And we have our User model inherit from UserMixin in addition to the db.models
+<span class="colour" style="color: rgb(86, 156, 214);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">` User(db.Model, UserMixin):`</span>
+    <...>
+
+4.  Login Route
+
+Head on over to routes and lets work on the login route.  First import user\_login
+
+/routes.py
+<span class="colour" style="color: rgb(86, 156, 214);">from</span><span class="colour" style="color: rgb(212, 212, 212);"> flask\_login </span><span class="colour" style="color: rgb(86, 156, 214);">import</span><span class="colour" style="color: rgb(212, 212, 212);"> login\_user</span>
+
+<span class="colour" style="color: rgb(212, 212, 212);">#\_\_\_ Now let's look at the login route.  </span>
+<span class="colour" style="color: rgb(212, 212, 212);">@app.route(</span><span class="colour" style="color: rgb(206, 145, 120);">"/login"</span><span class="colour" style="color: rgb(212, 212, 212);">, methods=[</span><span class="colour" style="color: rgb(206, 145, 120);">'GET'</span><span class="colour" style="color: rgb(212, 212, 212);">, </span><span class="colour" style="color: rgb(206, 145, 120);">'POST'</span><span class="colour" style="color: rgb(212, 212, 212);">])</span>
+<span class="colour" style="color: rgb(86, 156, 214);">def</span><span class="colour" style="color: rgb(212, 212, 212);"> login():</span>
+    <span class="colour" style="color: rgb(212, 212, 212);">form = LoginForm()</span>
+    <span class="colour" style="color: rgb(86, 156, 214);">if</span><span class="colour" style="color: rgb(212, 212, 212);"> form.validate\_on\_submit():</span>
+        <span class="colour" style="color: rgb(212, 212, 212);">user = User.query.filter\_by(email=form.email.data).first()</span>
+        <span class="colour" style="color: rgb(86, 156, 214);">if</span><span class="colour" style="color: rgb(212, 212, 212);"> user </span><span class="colour" style="color: rgb(86, 156, 214);">and</span><span class="colour" style="color: rgb(212, 212, 212);"> bcrypt.check\_password\_hash(user.password, form.password.data):</span>
+            <span class="colour" style="color: rgb(212, 212, 212);">login\_user(user, remember=form.remember.data)</span>
+            <span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> redirect(url\_for(</span><span class="colour" style="color: rgb(206, 145, 120);">'home'</span><span class="colour" style="color: rgb(212, 212, 212);">))</span>
+        <span class="colour" style="color: rgb(86, 156, 214);">else</span><span class="colour" style="color: rgb(212, 212, 212);">:</span>
+            <span class="colour" style="color: rgb(212, 212, 212);">flash(</span><span class="colour" style="color: rgb(206, 145, 120);">'login uncucessful. Please check email and password'</span><span class="colour" style="color: rgb(212, 212, 212);">, </span><span class="colour" style="color: rgb(206, 145, 120);">'danger'</span><span class="colour" style="color: rgb(212, 212, 212);">)</span>
+<span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> render\_template(</span><span class="colour" style="color: rgb(206, 145, 120);">'login.html'</span><span class="colour" style="color: rgb(212, 212, 212);">, title=</span><span class="colour" style="color: rgb(206, 145, 120);">'Login'</span><span class="colour" style="color: rgb(212, 212, 212);">, form=form)</span>
+
+So we grab a user by their email address and save it to a variable called user.  We check that the user exists and if the password is correct in one conditional.  Then we use the login\_user method from flask-login passing the user as an argument and the remember me True or False value as well.  We redirect to Home.  If they have the wrong password or they don't exist, we have an else statement for a flash message.
+
+5.  Hide login and register page if they are logged in
+
+Let's add current\_user to our imports on routes.py
+/routes.py
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flask_login `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` login_user, current_user`</span>
+
+Now if someone goes to the register route and they are logged in, it redirects them to the home page.
+<span class="colour" style="color: rgb(212, 212, 212);">`@app.route(`</span><span class="colour" style="color: rgb(206, 145, 120);">`"/register"`</span><span class="colour" style="color: rgb(212, 212, 212);">`, methods=[`</span><span class="colour" style="color: rgb(206, 145, 120);">`'GET'`</span><span class="colour" style="color: rgb(212, 212, 212);">`, `</span><span class="colour" style="color: rgb(206, 145, 120);">`'POST'`</span><span class="colour" style="color: rgb(212, 212, 212);">`])`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`def`</span><span class="colour" style="color: rgb(212, 212, 212);">` register():`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` current_user.is_authenticated:`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`return`</span><span class="colour" style="color: rgb(212, 212, 212);">` redirect(url_for(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'home'`</span><span class="colour" style="color: rgb(212, 212, 212);">`))`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`...`</span>
+
+6.  Logout Route
+Import Logout\_user from flask-login
+/routes.py
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flask_login `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` login_user, current_user, logout_user`</span>
+
+and lets look at the logout route
+<span class="colour" style="color: rgb(212, 212, 212);">`@app.route(`</span><span class="colour" style="color: rgb(206, 145, 120);">`"/logout"`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`def`</span><span class="colour" style="color: rgb(212, 212, 212);">` logout():`</span>
+    <span class="colour" style="color: rgb(212, 212, 212);">`logout_user()`</span>
+    <span class="colour" style="color: rgb(86, 156, 214);">`return`</span><span class="colour" style="color: rgb(212, 212, 212);">` redirect(url_for(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'home'`</span><span class="colour" style="color: rgb(212, 212, 212);">`))`</span>
+
+Pretty darn simple.
+
+7.  Navbar hide and show auth routes.
+Let's go to our layout.html and put in our conditionals for auth
+
+/layout.html
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` current_user.is_authenticated %}`</span>
+     <span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"nav-item nav-link"`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`href`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"{{ url_for('logout') }}"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`Logout`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`else`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
+    <span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"nav-item nav-link"`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`href`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"{{ url_for('login') }}"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`Login`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+    <span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"nav-item nav-link"`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`href`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"{{ url_for('register') }}"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`Register`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`endif`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
+
+8.  Block pages from those that are not logged in
+
+We will make an Account route and template to demonstrate
+/account.html
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`extends`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(206, 145, 120);">`"layout.html"`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`block`</span><span class="colour" style="color: rgb(212, 212, 212);">` content %}`</span>
+<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`h1`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`{{ current_user.username }}`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`h1`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`endblock`</span><span class="colour" style="color: rgb(212, 212, 212);">` content %}`</span>
+
+<span class="colour" style="color: rgb(212, 212, 212);">/layout.html</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` current_user.is_authenticated %}`</span>
+<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"nav-item nav-link"`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`href`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"{{ url_for('logout') }}"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`Logout`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+<span class="colour" style="color: rgb(128, 128, 128);">`<`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`class`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"nav-item nav-link"`</span><span class="colour" style="color: rgb(212, 212, 212);"></span><span class="colour" style="color: rgb(156, 220, 254);">`href`</span><span class="colour" style="color: rgb(212, 212, 212);">`=`</span><span class="colour" style="color: rgb(206, 145, 120);">`"{{ url_for('account') }}"`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span><span class="colour" style="color: rgb(212, 212, 212);">`Account`</span><span class="colour" style="color: rgb(128, 128, 128);">`</`</span><span class="colour" style="color: rgb(86, 156, 214);">`a`</span><span class="colour" style="color: rgb(128, 128, 128);">`>`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`{% `</span><span class="colour" style="color: rgb(86, 156, 214);">`else`</span><span class="colour" style="color: rgb(212, 212, 212);">` %}`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">...</span>
+
+/routes.py
+Here we use a decorator to check authentication much like django.
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flask_login `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">` <...> login_required`</span>
+
+<span class="colour" style="color: rgb(212, 212, 212);">`@app.route(`</span><span class="colour" style="color: rgb(206, 145, 120);">`"/account"`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`@login_required`</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`def`</span><span class="colour" style="color: rgb(212, 212, 212);">` account():`</span>
+    <span class="colour" style="color: rgb(86, 156, 214);">`return`</span><span class="colour" style="color: rgb(212, 212, 212);">` render_template(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'account.html'`</span><span class="colour" style="color: rgb(212, 212, 212);">`, title=`</span><span class="colour" style="color: rgb(206, 145, 120);">`'Account'`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+
+<span class="colour" style="color: rgb(212, 212, 212);">We have to add in our init file the name of our login route for the login manager.</span>
+
+<span class="colour" style="color: rgb(212, 212, 212);">login\_manager = LoginManager(app)</span>
+<span class="colour" style="color: rgb(212, 212, 212);">login\_manager.login\_view = </span><span class="colour" style="color: rgb(206, 145, 120);">'login' //--> this is the name of the view function</span>
+
+Now when we go to a page that requires us to be logged in, it redirects us to the login page.
 
 <br>
-<br>
-<br>
-<br>
+9.  What if we want to redirect them back to the page that they were on after they login?  Well that is saved in the URL params when they get redirected to the login page.
+
+Need access to request object
+/routes.py
+<span class="colour" style="color: rgb(86, 156, 214);">`from`</span><span class="colour" style="color: rgb(212, 212, 212);">` flask `</span><span class="colour" style="color: rgb(86, 156, 214);">`import`</span><span class="colour" style="color: rgb(212, 212, 212);">`  <...> request`</span>
+
+def login():
+<...>
+<span class="colour" style="color: rgb(212, 212, 212);">`login_user(user, remember=form.remember.data)`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">`next_page = request.args.get(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'next'`</span><span class="colour" style="color: rgb(212, 212, 212);">`)`</span>
+<span class="colour" style="color: rgb(212, 212, 212);">#\_\_\_ conditional that checks next page and otherwise routes home</span>
+<span class="colour" style="color: rgb(86, 156, 214);">`return`</span><span class="colour" style="color: rgb(212, 212, 212);">` redirect(nextpage) `</span><span class="colour" style="color: rgb(86, 156, 214);">`if`</span><span class="colour" style="color: rgb(212, 212, 212);">` next_page `</span><span class="colour" style="color: rgb(86, 156, 214);">`else`</span><span class="colour" style="color: rgb(212, 212, 212);">` redirect(url_for(`</span><span class="colour" style="color: rgb(206, 145, 120);">`'home'`</span><span class="colour" style="color: rgb(212, 212, 212);">`))`</span>
+<...>
+
 <br>
 <br>
 <br>
