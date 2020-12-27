@@ -858,6 +858,21 @@ This will allow us to abort the request if a user is trying to edit another user
         <span class="colour" style="color: rgb(212, 212, 212);">form.content.data = post.content</span>
     <span class="colour" style="color: rgb(86, 156, 214);">return</span><span class="colour" style="color: rgb(212, 212, 212);"> render\_template(</span><span class="colour" style="color: rgb(206, 145, 120);">'create\_post.html'</span><span class="colour" style="color: rgb(212, 212, 212);">, title=</span><span class="colour" style="color: rgb(206, 145, 120);">'Update Post'</span><span class="colour" style="color: rgb(212, 212, 212);">, legend=</span><span class="colour" style="color: rgb(206, 145, 120);">'Update Post'</span><span class="colour" style="color: rgb(212, 212, 212);">, form=form)</span>
 
+We are passing the legend keyword now so that we can keep the same template between create and update template and just changing the title of the form
+
+4.  Update and Delete links, and delete route
+
+show and hide links in templates...
+{% if post.auther == current\_user %}
+<... update and delete links...>
+{% endif %}
+
+He's making a delete confirmation modal that has a form submit button.  The action in the form needs to go to the delete route.
+
+Make a delete route
+
+<br>
+<br>
 <br>
 <br>
 <br>
